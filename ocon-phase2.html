@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ocon Chemicals Phase 2 — Dopamine Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0c0c14;
+  --card: #16162a;
+  --card-border: rgba(255,255,255,0.08);
+  --accent: #7c3aed;
+  --accent-glow: rgba(124, 58, 237, 0.15);
+  --green: #22c55e;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --text: #f0f0f5;
+  --text-secondary: #a0a0b8;
+  --radius: 16px;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 19px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck { width: 100%; height: 100%; position: relative; }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+  overflow-y: auto;
+  padding: 50px 40px 80px;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+.slide.center-v { align-items: center; }
+
+.slide::-webkit-scrollbar { width: 6px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 3px; }
+
+.slide-inner {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif; font-weight: 700; line-height: 1.15; }
+h1 { font-size: 52px; letter-spacing: -0.02em; margin-bottom: 16px; text-wrap: balance; }
+h2 { font-size: 44px; letter-spacing: -0.02em; margin-bottom: 16px; }
+h3 { font-size: 28px; margin-bottom: 12px; }
+h4 { font-size: 22px; margin-bottom: 8px; font-weight: 600; }
+
+.eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.subtitle { font-size: 22px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; font-weight: 400; }
+
+.playfair-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.text-secondary { color: var(--text-secondary); }
+.text-accent { color: var(--accent); }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+.text-amber { color: var(--amber); }
+strong { font-weight: 700; }
+s { color: var(--text-secondary); text-decoration: line-through; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 36px;
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+.card:hover { border-color: rgba(255,255,255,0.12); box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+.card-sm { padding: 24px; }
+.card-red { border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.05); }
+.card-green { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.05); }
+.card-violet { border-color: rgba(124,58,237,0.35); background: rgba(124,58,237,0.06); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
+
+.bullet-list { list-style: none; padding: 0; }
+.bullet-list li { padding: 10px 0 10px 28px; position: relative; font-size: 18px; line-height: 1.5; }
+.bullet-list li::before { content: ''; position: absolute; left: 0; top: 18px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.bullet-list.green li::before { background: var(--green); }
+.bullet-list.red li::before { background: var(--red); }
+.bullet-list.amber li::before { background: var(--amber); }
+
+.check-list { list-style: none; padding: 0; }
+.check-list li { padding: 8px 0 8px 32px; position: relative; font-size: 18px; line-height: 1.5; }
+.check-list li::before { content: '\2713'; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 700; font-size: 18px; }
+
+.stat { text-align: center; padding: 28px 20px; }
+.stat .num { font-size: 48px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px; }
+.stat .label { font-size: 16px; color: var(--text-secondary); line-height: 1.4; }
+
+.quote-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+.quote-card p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 22px; line-height: 1.5; }
+
+.pricing-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 36px;
+  text-align: center;
+  position: relative;
+}
+.pricing-card.featured { border-color: var(--accent); box-shadow: 0 0 40px rgba(124,58,237,0.12); }
+.pricing-badge {
+  position: absolute;
+  top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #fff;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 5px 20px; border-radius: 20px;
+}
+.price-big { font-size: 52px; font-weight: 700; margin: 16px 0 8px; }
+
+.value-line {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; font-size: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.value-line:last-child { border-bottom: none; }
+
+.tl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.tl-card {
+  background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 28px; position: relative;
+}
+.tl-card.tl-full { grid-column: 1 / -1; border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.04); }
+.tl-card h4 { font-size: 18px; margin-bottom: 12px; }
+.tl-card li { font-size: 15px; color: var(--text-secondary); padding: 3px 0; line-height: 1.5; list-style: none; }
+.tl-card ul { list-style: none; padding: 0; }
+.tl-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 12px; border-radius: 20px; margin-bottom: 12px; }
+.tl-badge-purple { background: rgba(124,58,237,0.15); color: var(--accent); }
+.tl-badge-amber { background: rgba(245,158,11,0.15); color: var(--amber); }
+.tl-badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+
+.glow-card {
+  background: linear-gradient(135deg, rgba(124,58,237,0.12) 0%, rgba(34,197,94,0.08) 100%);
+  border: 1px solid rgba(124,58,237,0.3);
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(124,58,237,0.08);
+}
+
+.section-divider {
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  border-radius: 2px;
+  margin: 0 auto 32px;
+}
+
+details {
+  background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; margin-bottom: 12px;
+}
+details summary { padding: 18px 24px; cursor: pointer; font-weight: 600; font-size: 18px; list-style: none; display: flex; align-items: center; gap: 12px; user-select: none; }
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: '\25B6'; font-size: 12px; color: var(--accent); transition: transform 200ms ease; flex-shrink: 0; }
+details[open] summary::before { transform: rotate(90deg); }
+details .detail-body { padding: 0 24px 20px 48px; }
+details .detail-body li { font-size: 16px; color: var(--text-secondary); padding: 4px 0; line-height: 1.5; list-style: none; }
+details .detail-body ul { list-style: none; padding: 0; }
+
+.faq-item { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; margin-bottom: 10px; }
+.faq-item summary { padding: 14px 20px; cursor: pointer; font-weight: 500; font-size: 16px; list-style: none; display: flex; align-items: center; gap: 10px; user-select: none; color: var(--text-secondary); }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::before { content: '+'; font-size: 16px; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+.faq-item[open] summary::before { content: '\2212'; }
+.faq-item[open] summary { color: var(--text); }
+.faq-item .faq-body { padding: 0 20px 16px 40px; font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 48px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(12,12,20,0.92); backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255,255,255,0.06); z-index: 100;
+}
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; transition: all 200ms ease; flex-shrink: 0; }
+.nav-dot.active { background: var(--accent); transform: scale(1.3); }
+.nav-counter { position: fixed; bottom: 54px; right: 40px; font-size: 13px; color: var(--text-secondary); z-index: 100; font-variant-numeric: tabular-nums; }
+
+.mb-4 { margin-bottom: 4px; } .mb-8 { margin-bottom: 8px; } .mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; } .mb-20 { margin-bottom: 20px; } .mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; } .mb-40 { margin-bottom: 40px; }
+.mt-12 { margin-top: 12px; } .mt-20 { margin-top: 20px; }
+.text-center { text-align: center; } .text-left { text-align: left; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.small { font-size: 14px; } .muted { color: var(--text-secondary); opacity: 0.6; }
+
+.pipeline-row {
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 17px;
+}
+.pipeline-row:last-child { border-bottom: none; }
+.pipeline-header { font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); padding-bottom: 8px; }
+.status-badge {
+  display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 12px; border-radius: 20px;
+}
+.status-signed { background: rgba(34,197,94,0.15); color: var(--green); }
+.status-interested { background: rgba(124,58,237,0.15); color: var(--accent); }
+.status-warm { background: rgba(245,158,11,0.15); color: var(--amber); }
+.status-new { background: rgba(56,189,248,0.15); color: #38bdf8; }
+
+.channel-icon {
+  width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin-bottom: 16px;
+}
+
+.bonus-tag {
+  display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 3px 10px; border-radius: 12px; background: rgba(34,197,94,0.15); color: var(--green); margin-left: 8px;
+}
+
+@media (max-width: 1024px) {
+  .slide { padding: 40px 24px 80px; }
+  h1 { font-size: 40px; } h2 { font-size: 36px; }
+  .grid-2, .grid-3, .grid-4, .tl-grid { grid-template-columns: 1fr; }
+  .tl-card.tl-full { grid-column: auto; }
+  .pipeline-row { grid-template-columns: 1fr; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="pwGate" style="position:fixed;inset:0;z-index:9999;background:#0c0c14;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;max-width:400px;padding:40px;">
+    <p style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:#7c3aed;margin-bottom:12px;">Dopamine Digital</p>
+    <h2 style="font-family:'Inter',sans-serif;font-size:28px;font-weight:700;color:#f0f0f5;margin-bottom:8px;">Ocon Chemicals &mdash; Phase 2</h2>
+    <p style="font-size:16px;color:#a0a0b8;margin-bottom:32px;">Enter the password to view this presentation</p>
+    <input id="pwInput" type="password" placeholder="Password" autocomplete="off" style="width:100%;padding:14px 20px;font-size:17px;font-family:'Inter',sans-serif;background:#16162a;border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#f0f0f5;outline:none;text-align:center;margin-bottom:12px;" onkeydown="if(event.key==='Enter')checkPw()">
+    <p id="pwError" style="font-size:14px;color:#ef4444;opacity:0;transition:opacity 200ms;margin-bottom:16px;">Incorrect password</p>
+    <button onclick="checkPw()" style="padding:12px 36px;font-size:16px;font-weight:600;font-family:'Inter',sans-serif;background:#7c3aed;color:#fff;border:none;border-radius:10px;cursor:pointer;">View Presentation</button>
+  </div>
+</div>
+<script>
+function checkPw(){
+  var v=document.getElementById('pwInput').value;
+  if(v==='OCON'||v==='ocon'||v==='Ocon'){
+    document.getElementById('pwGate').style.display='none';
+    sessionStorage.setItem('ocon_auth','1');
+  } else {
+    document.getElementById('pwError').style.opacity='1';
+    document.getElementById('pwInput').style.borderColor='rgba(239,68,68,0.5)';
+    setTimeout(function(){document.getElementById('pwError').style.opacity='0';document.getElementById('pwInput').style.borderColor='rgba(255,255,255,0.1)';},2000);
+  }
+}
+if(sessionStorage.getItem('ocon_auth')==='1'){document.getElementById('pwGate').style.display='none';}
+else{document.getElementById('pwInput').focus();}
+</script>
+
+<div class="deck" id="deck">
+
+<!-- ============================================================ -->
+<!-- SLIDE 1: TITLE -->
+<!-- ============================================================ -->
+<div class="slide center-v active" data-slide="1">
+<div class="slide-inner text-center" style="justify-content:center; min-height:100%; display:flex; flex-direction:column;">
+  <p class="eyebrow mb-24" style="font-size:15px; letter-spacing:0.2em;">DOPAMINE DIGITAL &times; OCON CHEMICALS</p>
+  <h1 style="font-size:50px; margin-bottom:20px;">Phase 2: <span class="text-accent">Your AI Revenue Machine</span></h1>
+  <p class="subtitle" style="max-width:700px; margin:0 auto 40px;">Phase 1 built the foundation. Phase 2 installs an AI-powered sales system into Ocon that your team operates, your data powers, and you keep when we are done.</p>
+  <p class="playfair-quote" style="max-width:550px; margin:0 auto 40px; font-size:20px;">"Prepared for Kevin Mulcahy &amp; the Ocon Chemicals team"</p>
+  <p class="small muted">February 2026</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: PHASE 1 HARD FACTS -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="2">
+<div class="slide-inner">
+  <p class="eyebrow">Phase 1 Results</p>
+  <h2 class="mb-12">Here Is Exactly What We Did</h2>
+  <p class="subtitle">90 days of market research, infrastructure building, and outbound execution. Every asset listed below belongs to Ocon.</p>
+
+  <div class="grid-4 mb-32">
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:16px 0;">
+        <div class="num text-accent" style="font-size:40px;">17</div>
+        <div class="label">Warmed Sending<br>Accounts</div>
+      </div>
+    </div>
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:16px 0;">
+        <div class="num text-accent" style="font-size:40px;">1,777</div>
+        <div class="label">Leads<br>Contacted</div>
+      </div>
+    </div>
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:16px 0;">
+        <div class="num text-accent" style="font-size:40px;">3,591</div>
+        <div class="label">Emails<br>Sent</div>
+      </div>
+    </div>
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:16px 0;">
+        <div class="num text-green" style="font-size:40px;">29</div>
+        <div class="label">Real Human<br>Replies</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-sm">
+      <h4 class="text-accent mb-12">Assets Ocon Now Owns</h4>
+      <ul class="check-list" style="font-size:16px;">
+        <li>Complete ICP research document - 630 lines of market intelligence</li>
+        <li>"Zero-Stockout Safety Net" offer - tested and proven</li>
+        <li>Custom Loom outreach system with Miro board, script, and SOP</li>
+        <li>26+ personalised videos sent to major Irish companies</li>
+        <li>Customer testimonial recorded on Riverside</li>
+        <li>Full email infrastructure - 3 domains, warmed and ready</li>
+      </ul>
+    </div>
+    <div class="card card-sm card-green">
+      <h4 class="text-green mb-12">Key Discovery</h4>
+      <div class="text-center" style="padding:16px 0;">
+        <div style="font-size:56px; font-weight:700;"><span class="text-green">7.8%</span> <span class="text-secondary" style="font-size:22px;">vs</span> <span class="text-amber">2.8%</span></div>
+        <p style="font-size:17px; margin-top:12px;">Independent labs respond at <strong class="text-green">3x the rate</strong> of Food &amp; Beverage</p>
+      </div>
+      <p class="text-secondary" style="font-size:15px; margin-top:8px;">It took 1,777 leads and 3,591 emails to find this. This single insight redirects the entire Phase 2 strategy.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3: GUARANTEE MET + PIPELINE -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="3">
+<div class="slide-inner">
+  <p class="eyebrow text-green">Guarantee</p>
+  <h2 class="mb-12">The Phase 1 Guarantee Has Been Met</h2>
+  <p class="subtitle">The contract guaranteed &euro;150,000 in pipeline. Here is the pipeline we generated, deal by deal.</p>
+
+  <div class="card mb-24" style="padding:24px 36px;">
+    <div class="pipeline-row pipeline-header">
+      <div>Company / Contact</div>
+      <div>Status</div>
+      <div style="text-align:right;">Est. Annual Value</div>
+    </div>
+    <div class="pipeline-row">
+      <div><strong>Kieran Daly</strong> &mdash; Glenilen Farm</div>
+      <div><span class="status-badge status-signed">Signed Deal</span></div>
+      <div style="text-align:right;" class="text-green">&euro;30-50K</div>
+    </div>
+    <div class="pipeline-row">
+      <div><strong>Noel Murphy</strong> &mdash; BioMarin Pharmaceutical</div>
+      <div><span class="status-badge status-interested">Interested</span></div>
+      <div style="text-align:right;">&euro;100-200K</div>
+    </div>
+    <div class="pipeline-row">
+      <div><strong>Peter Flanagan PhD</strong> &mdash; Health Service Executive</div>
+      <div><span class="status-badge status-interested">Interested</span></div>
+      <div style="text-align:right;">&euro;50-100K</div>
+    </div>
+    <div class="pipeline-row">
+      <div><strong>Homayoun Safarpour</strong> &mdash; XTREME Living Lab</div>
+      <div><span class="status-badge status-interested">Interested</span></div>
+      <div style="text-align:right;">&euro;10-20K</div>
+    </div>
+    <div class="pipeline-row">
+      <div><strong>Aaron</strong> &mdash; TechRight Environmental</div>
+      <div><span class="status-badge status-new">Fresh Reply</span></div>
+      <div style="text-align:right;">&euro;20-40K</div>
+    </div>
+    <div class="pipeline-row">
+      <div><strong>19 contacts</strong> &mdash; Eurofins, SGS, MSD, Eli Lilly, Stryker, UCD, RCSI</div>
+      <div><span class="status-badge status-warm">In Follow-Up</span></div>
+      <div style="text-align:right;">&euro;150-300K</div>
+    </div>
+    <div class="pipeline-row" style="border-top:2px solid rgba(34,197,94,0.3); padding-top:16px;">
+      <div><strong>Total Pipeline Generated</strong></div>
+      <div></div>
+      <div style="text-align:right; font-size:24px;"><strong class="text-green">&euro;360-710K</strong></div>
+    </div>
+  </div>
+
+  <div class="glow-card mb-24">
+    <p style="font-size:20px; font-weight:600; margin-bottom:8px;">Guarantee: &euro;150,000 pipeline &mdash; <span class="text-green">Delivered</span></p>
+    <p class="text-secondary" style="font-size:17px;">BioMarin alone is a potential &euro;200K account. The total pipeline is 2-4x the guaranteed amount. We also added <strong>2 extra weeks of work free of charge</strong> as a gesture of good faith to make sure leads were properly followed up.</p>
+  </div>
+
+  <div class="card card-sm card-violet text-center">
+    <p style="font-size:17px;">Phase 1 was not cheap. But the research, the infrastructure, the 17 warmed accounts, and the ICP data - <strong>Kevin never pays for any of that again.</strong> That foundation is built. Phase 2 is pure execution.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4: GAP #1 — MANUAL PROCESSES AROUND AUTOMATION -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="4">
+<div class="slide-inner">
+  <p class="eyebrow text-red">Gap #1</p>
+  <h2 class="mb-12">The Sending Was Automated.<br>Everything Else Was Not.</h2>
+  <p class="subtitle">Instantly and Waalaxy handled the outreach. But finding leads, uploading them, qualifying replies, and responding to interested prospects &mdash; all of that was manual.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm card-red">
+      <h4 class="text-red mb-12">What Was Manual in Phase 1</h4>
+      <ul class="bullet-list red">
+        <li><strong>Lead sourcing</strong> &mdash; scraping, filtering, and uploading leads by hand into every campaign</li>
+        <li><strong>Lead qualification</strong> &mdash; reading every reply manually to decide who is interested and who is not</li>
+        <li><strong>Response time</strong> &mdash; hours or days between a reply landing and someone following up</li>
+        <li><strong>Data enrichment</strong> &mdash; no automated way to find phone numbers, verify emails, or score fit</li>
+      </ul>
+    </div>
+    <div class="card card-sm card-green">
+      <h4 class="text-green mb-12">What AI Replaces in Phase 2</h4>
+      <ul class="bullet-list green">
+        <li><strong>AI lead sourcing</strong> &mdash; enrichment flows find, verify, and score leads automatically</li>
+        <li><strong>AI qualification</strong> &mdash; every reply classified and routed in under 60 seconds</li>
+        <li><strong>Instant response</strong> &mdash; AI drafts and sends personalised follow-ups the moment someone replies</li>
+        <li><strong>Automated enrichment</strong> &mdash; phone numbers, company data, and ICP scoring happen in the background</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <p>"The tools worked. The campaigns ran. But every lead had to be found by hand, uploaded by hand, and followed up by hand. Phase 2 removes the human bottleneck from every step except the one that matters &mdash; closing the deal."</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5: SOLUTION #1 — AI-POWERED OUTREACH ENGINE -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="5">
+<div class="slide-inner">
+  <p class="eyebrow text-green">Solution #1</p>
+  <h2 class="mb-12">AI-Powered Outreach Engine</h2>
+  <p class="subtitle">Same infrastructure. Same channels. But now AI handles the entire pipeline &mdash; from finding the lead to qualifying the reply. Your team only touches the deal when it is ready to close.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm">
+      <h4 class="mb-12">What Changes</h4>
+      <ul class="check-list" style="font-size:16px;">
+        <li><strong>AI lead sourcing</strong> &mdash; enrichment flows scrape, verify, and upload leads automatically</li>
+        <li><strong>Independent lab targeting</strong> &mdash; focused on the segment with 3x the reply rate</li>
+        <li><strong>AI reply classification</strong> &mdash; every response scored, categorised, and routed in under 60 seconds</li>
+        <li><strong>AI-drafted follow-ups</strong> &mdash; personalised responses sent instantly, not hours later</li>
+        <li><strong>Phone and email enrichment</strong> &mdash; verified contact data added automatically for your sales team</li>
+      </ul>
+    </div>
+    <div class="card card-sm card-violet">
+      <h4 class="mb-12">System Output</h4>
+      <div class="stat" style="padding:8px 0;">
+        <div class="num text-accent" style="font-size:36px;">250+</div>
+        <div class="label">Targeted emails per week</div>
+      </div>
+      <div class="stat" style="padding:8px 0;">
+        <div class="num text-accent" style="font-size:36px;">100+</div>
+        <div class="label">LinkedIn touches per week</div>
+      </div>
+      <div class="stat" style="padding:8px 0;">
+        <div class="num text-green" style="font-size:36px;">&lt; 60s</div>
+        <div class="label">AI reply time on every response</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm card-green">
+    <p style="font-size:17px;"><strong>Same volume, zero manual work.</strong> The 17 warmed sending accounts and proven messaging stay. What changes is that AI now handles lead sourcing, qualification, enrichment, and follow-up &mdash; end to end. Ocon keeps the entire system.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6: GAP #2 — MANUAL FOLLOW-UP -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="6">
+<div class="slide-inner">
+  <p class="eyebrow text-red">Gap #2</p>
+  <h2 class="mb-12">Manual Follow-Up Is Losing Warm Leads</h2>
+  <p class="subtitle">People are replying to the Loom videos on LinkedIn. Filip is following up, but doing it manually across time zones means things fall through the cracks.</p>
+
+  <div class="glow-card mb-24" style="padding:32px 40px;">
+    <div style="font-size:72px; font-weight:700; color:var(--green); margin-bottom:8px;">391%</div>
+    <p style="font-size:20px; font-weight:600; margin-bottom:8px;">higher conversion when you respond in under 60 seconds</p>
+    <p class="text-secondary" style="font-size:15px;">&mdash; Alex Hormozi, $100M Leads</p>
+  </div>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm card-red">
+      <h4 class="text-red mb-12">The Problem</h4>
+      <ul class="bullet-list red">
+        <li><strong>Filip follows up manually</strong> &mdash; but time zones create response gaps</li>
+        <li>No automated multi-touch sequence after a positive reply</li>
+        <li>No phone enrichment &mdash; your Irish sales team cannot call warm leads</li>
+        <li>Glenilen Farm was closed because someone <strong>picked up the phone</strong> &mdash; but that was a one-off, not a system</li>
+      </ul>
+    </div>
+    <div class="card card-sm">
+      <h4 class="mb-12">The Proof It Works</h4>
+      <div class="card card-sm card-green" style="margin-bottom:16px;">
+        <p style="font-size:16px;"><strong>Glenilen Farm:</strong> Our outreach found the lead. A sales associate picked up the phone and called them. Deal signed. That is the model.</p>
+      </div>
+      <p class="text-secondary" style="font-size:16px;">The outreach works. The Loom videos get replies. The interest is real. What is missing is a system that captures that interest instantly and puts it in front of your team while the lead is still warm.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7: SOLUTION #2 — SPEED TO LEAD -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="7">
+<div class="slide-inner">
+  <p class="eyebrow text-green">Solution #2</p>
+  <h2 class="mb-12">Speed to Lead System</h2>
+  <p class="subtitle">AI handles the speed. Your Irish sales team handles the close. Every reply gets an automated response in under 60 seconds, a phone number enriched, and a handoff to Ocon's team.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm">
+      <h4 class="mb-12">The Automated Pipeline</h4>
+      <ul class="bullet-list green">
+        <li><strong>Instant AI reply</strong> &mdash; when someone responds on LinkedIn or email, AI responds in under 60 seconds</li>
+        <li><strong>Multi-step follow-up</strong> &mdash; automated sequences keep the conversation warm across days</li>
+        <li><strong>Phone number enrichment</strong> &mdash; we find their direct number the moment they reply</li>
+        <li><strong>Real-time handoff</strong> &mdash; your Irish sales rep gets a notification with the lead's name, company, and phone number</li>
+      </ul>
+    </div>
+    <div class="card card-sm card-violet">
+      <h4 class="text-accent mb-12">Boots on the Ground</h4>
+      <p class="text-secondary mb-12" style="font-size:16px;">This is Ocon's competitive advantage. No other lab supplier in Ireland has this.</p>
+      <ul class="bullet-list">
+        <li><strong>AI finds the lead</strong> through email and LinkedIn outreach</li>
+        <li><strong>AI warms them up</strong> with instant, personalised follow-up</li>
+        <li><strong>AI enriches the phone number</strong> and passes it to your team</li>
+        <li><strong>Your sales rep calls them</strong> while the prospect is still thinking about Ocon</li>
+      </ul>
+      <p class="text-secondary mt-12" style="font-size:15px;">Loom videos get attention. AI handles speed. Your team closes face-to-face in Ireland.</p>
+    </div>
+  </div>
+
+  <div class="card card-sm card-green">
+    <p style="font-size:17px;"><strong>The formula:</strong> Loom video gets attention &rarr; LinkedIn reply shows interest &rarr; AI responds in under 60 seconds &rarr; phone number enriched &rarr; your sales rep calls them. Speed + human touch = closed deals.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8: GAP #3 — EXISTING CUSTOMERS UNDER-BUYING -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="8">
+<div class="slide-inner">
+  <p class="eyebrow text-red">Gap #3</p>
+  <h2 class="mb-12">Your Existing Customers Are Under-Buying</h2>
+  <p class="subtitle">Ocon stocks over 1,000 SKUs. Most customers buy 5-10. That is revenue sitting on the table that nobody is picking up.</p>
+
+  <div class="grid-3 mb-24">
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:12px 0;">
+        <div class="num text-accent" style="font-size:44px;">1,000+</div>
+        <div class="label">SKUs in Ocon's catalogue</div>
+      </div>
+    </div>
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:12px 0;">
+        <div class="num text-red" style="font-size:44px;">5-10</div>
+        <div class="label">Products a typical<br>customer buys</div>
+      </div>
+    </div>
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:12px 0;">
+        <div class="num text-green" style="font-size:44px;">10-50x</div>
+        <div class="label">Potential increase<br>in wallet share</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm card-red">
+      <h4 class="text-red mb-12">The Gap</h4>
+      <ul class="bullet-list red">
+        <li>No system for identifying what each customer should be buying</li>
+        <li>No automated upsell or cross-sell recommendations</li>
+        <li>Revenue left on the table with every order that could have been bigger</li>
+        <li>Competitors like SLS win on price. Ocon should win on <strong>proactive service</strong></li>
+      </ul>
+    </div>
+    <div class="card card-sm">
+      <h4 class="mb-12">Why This Matters</h4>
+      <p class="text-secondary" style="font-size:16px; margin-bottom:16px;">Acquiring a new customer costs 5-7x more than expanding an existing one. These people already trust Kevin. They already buy from Ocon. They just do not know what else you sell.</p>
+      <p class="text-secondary" style="font-size:16px;">A single email from Kevin saying "I noticed you haven't ordered X in 3 months - want me to add it to your next delivery?" could add thousands in annual revenue per customer.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9: SOLUTION #3 — CUSTOMER REVENUE ENGINE -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="9">
+<div class="slide-inner">
+  <p class="eyebrow text-green">Solution #3</p>
+  <h2 class="mb-12">Customer Revenue Engine</h2>
+  <p class="subtitle">AI analyses your customer purchase data and tells your team exactly who is under-buying and what to recommend. Simple text emails from Kevin. Your people handle the orders.</p>
+
+  <div class="quote-card mb-24">
+    <p>"Think of it as 'Amazon Recommends' for lab supplies &mdash; except it is built on your data, sends as Kevin, and your team handles the orders."</p>
+  </div>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm">
+      <h4 class="mb-12">How It Works</h4>
+      <ul class="bullet-list">
+        <li><strong>Step 1:</strong> You provide your customer list with purchase history</li>
+        <li><strong>Step 2:</strong> AI maps each customer to products they should be buying based on their lab type</li>
+        <li><strong>Step 3:</strong> Personalised emails sent as Kevin &mdash; "I noticed you haven't ordered X in 3 months"</li>
+        <li><strong>Step 4:</strong> Customer replies, your team processes the order</li>
+      </ul>
+    </div>
+    <div class="card card-sm card-green">
+      <h4 class="text-green mb-12">Why This Is Safe</h4>
+      <ul class="check-list" style="font-size:16px;">
+        <li><strong>Existing customers</strong> &mdash; not cold prospects</li>
+        <li>They recognise Kevin's name and domain</li>
+        <li>Simple text emails &mdash; no links, no tracking pixels</li>
+        <li>GDPR compliant under existing business relationship</li>
+        <li>Zero deliverability risk &mdash; they already buy from you</li>
+        <li>If anything, customers appreciate the proactive service</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-sm card-violet text-center">
+    <p style="font-size:18px;"><strong>This is a new revenue stream, not a marketing service.</strong> This system runs on Ocon's data, from Ocon's domain, managed by Ocon's people. We build it. You own it. It keeps working after we leave.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 10: SCANSTATION 300 OPPORTUNITY -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="10">
+<div class="slide-inner">
+  <p class="eyebrow text-amber">Bonus System</p>
+  <h2 class="mb-12">ScanStation 300 Pipeline</h2>
+  <p class="subtitle">Kevin has exclusive rights to the ScanStation 300 in Ireland. One sale covers 2+ years of consulting fees. But nobody buys a &euro;100-500K product from a cold DM.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:12px 0;">
+        <div class="num text-green">&euro;100-500K</div>
+        <div class="label">Per unit value</div>
+      </div>
+    </div>
+    <div class="card card-sm text-center">
+      <div class="stat" style="padding:12px 0;">
+        <div class="num text-accent">1 sale</div>
+        <div class="label">Covers 2+ years of consulting</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm mb-24">
+    <h4 class="mb-12">The Value-First Approach</h4>
+    <p class="text-secondary mb-16" style="font-size:16px;">We do not pitch a &euro;100K product cold. We give them something valuable first, something that makes them realise they need what Ocon has.</p>
+    <ul class="bullet-list">
+      <li><strong>Free ROI Calculator:</strong> "How much is manual colony counting costing your lab?" &mdash; personalised by lab type and volume</li>
+      <li><strong>Exclusive virtual demo:</strong> Private ScanStation 300 walkthrough for QA managers &mdash; no commitment, just education</li>
+      <li><strong>Proof-based content:</strong> Case studies showing how labs cut colony counting time by 90% &mdash; builds desire before the ask</li>
+      <li><strong>Warm handoff to Kevin:</strong> Once they engage with the content, Kevin's team follows up with a personalised conversation</li>
+    </ul>
+  </div>
+
+  <div class="card card-sm card-green">
+    <p style="font-size:17px;"><strong>Target:</strong> QA labs, pharma QC, contract testing labs, and university research departments. Cold email and LinkedIn drive them to the lead magnet. AI qualifies engagement. Kevin's team closes face-to-face. Nobody else in Ireland is running a ScanStation pipeline like this.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 11: PROOF — THE AI SYSTEMS (SCREENSHOTS) -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="11">
+<div class="slide-inner">
+  <p class="eyebrow">Proof</p>
+  <h2 class="mb-12">These Systems Are Already Built</h2>
+  <p class="subtitle">These are not concepts or mockups. These are live AI systems we have built and are running for clients right now. We plug them into Ocon.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm" style="padding:16px;">
+      <p style="font-size:14px; font-weight:600; color:var(--accent); margin-bottom:8px;">Mission Control Dashboard</p>
+      <img src="assets/mission_control.jpg" alt="AI agent operations dashboard" style="width:100%; display:block; border-radius:10px;">
+      <p class="text-secondary mt-12" style="font-size:14px;">Your entire pipeline, campaign health, and lead status visible at a glance. Real-time data, not a weekly report.</p>
+    </div>
+    <div class="card card-sm" style="padding:16px;">
+      <p style="font-size:14px; font-weight:600; color:var(--accent); margin-bottom:8px;">AI Lead Response Engine</p>
+      <img src="assets/lead_response_workflow.jpg" alt="36-node n8n automation workflow" style="width:100%; display:block; border-radius:10px;">
+      <p class="text-secondary mt-12" style="font-size:14px;">36-node automation. Qualifies leads, drafts replies, routes opportunities &mdash; all in under 60 seconds.</p>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm" style="padding:16px;">
+      <p style="font-size:14px; font-weight:600; color:var(--accent); margin-bottom:8px;">Personalised Loom Video Outreach</p>
+      <img src="assets/loom_video_outreach.png" alt="Personalised Loom video with Miro board for HSE" style="width:100%; display:block; border-radius:10px;">
+      <p class="text-secondary mt-12" style="font-size:14px;">Every high-value target gets a personalised Miro board and Loom walkthrough. This one was made for Peter at the Health Service Executive.</p>
+    </div>
+    <div class="card card-sm" style="padding:16px;">
+      <p style="font-size:14px; font-weight:600; color:var(--accent); margin-bottom:8px;">Cold Email Campaign Engine</p>
+      <img src="assets/instantly_campaigns.png" alt="Instantly cold email campaigns" style="width:100%; display:block; border-radius:10px;">
+      <p class="text-secondary mt-12" style="font-size:14px;">AI-powered personalisation, deliverability monitoring, reply classification. 250+ emails per week on autopilot.</p>
+    </div>
+  </div>
+
+  <div class="card card-sm card-violet text-center">
+    <p style="font-size:17px;">These are deployed, operational systems &mdash; not slide deck promises. We connect Ocon to the same infrastructure that is generating results for other clients right now.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 12: WEEKLY KPI CHECK-INS (BONUS) -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="12">
+<div class="slide-inner">
+  <p class="eyebrow text-green">Free Bonus</p>
+  <h2 class="mb-12">Weekly KPI Check-In Calls</h2>
+  <p class="subtitle">You are never in the dark. Every week, our operations manager reviews every KPI with you. Every month, Jordan reviews the strategy. Kevin always knows exactly where the pipeline stands.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm" style="border-color:rgba(34,197,94,0.3);">
+      <span class="bonus-tag mb-12">Included Free</span>
+      <h4 class="mb-12">Weekly Call &mdash; Operations Review</h4>
+      <p class="text-secondary mb-12" style="font-size:16px;">Our operations manager has oversight of every KPI across all systems. Each week, she walks Kevin through:</p>
+      <ul class="bullet-list green" style="font-size:15px;">
+        <li><strong>Pipeline status</strong> &mdash; every lead tracked, where they are in the funnel, who needs follow-up</li>
+        <li><strong>Campaign KPIs</strong> &mdash; emails sent, reply rates, LinkedIn engagement, conversion metrics</li>
+        <li><strong>Lead routing</strong> &mdash; qualified leads sent to the right people on your team or escalated appropriately</li>
+        <li><strong>Blockers and next steps</strong> &mdash; what is working, what needs adjustment, what happens next week</li>
+      </ul>
+    </div>
+    <div class="card card-sm" style="border-color:rgba(34,197,94,0.3);">
+      <span class="bonus-tag mb-12">Included Free</span>
+      <h4 class="mb-12">Monthly Call &mdash; Strategy with Jordan</h4>
+      <p class="text-secondary mb-12" style="font-size:16px;">Jordan sets the strategy. Monthly calls review the bigger picture:</p>
+      <ul class="bullet-list" style="font-size:15px;">
+        <li><strong>Are we on track for the guarantee?</strong> &mdash; 50 qualified leads and &euro;300K pipeline check</li>
+        <li><strong>What segments are converting?</strong> &mdash; double down on what works, cut what does not</li>
+        <li><strong>Market shifts</strong> &mdash; adjust targeting, messaging, or channels based on data</li>
+        <li><strong>Growth planning</strong> &mdash; when to expand to UK, when to scale volume, system optimisation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-sm card-green text-center">
+    <p style="font-size:17px;"><strong>Kevin focuses on closing deals.</strong> We handle the systems, the KPIs, the lead routing, and the escalations. The weekly call makes sure nothing falls through the cracks and Kevin is always in the loop.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 13: AI AGENT BONUSES -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="13">
+<div class="slide-inner">
+  <p class="eyebrow text-green">Bonuses</p>
+  <h2 class="mb-12">AI Agents Deployed Free Over 30 Days</h2>
+  <p class="subtitle">These are AI tools we have built for our own business. We will deploy them into Ocon at no additional cost as part of the engagement.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm" style="border-color:rgba(34,197,94,0.3);">
+      <h4 class="mb-4">Sales Call Closing Auditor</h4>
+      <span class="bonus-tag">Free Bonus</span>
+      <img src="assets/keenan_audit.png" alt="AI sales call audit with scoring" style="width:100%; display:block; border-radius:10px; margin-top:12px; margin-bottom:12px;">
+      <p class="text-secondary" style="font-size:16px;">AI analyses Kevin's sales calls against proven closing frameworks. After every call, it flags what was missed, suggests better responses to objections, and tracks closing improvement over time.</p>
+      <ul class="check-list mt-12" style="font-size:15px;">
+        <li>Analyses call recordings automatically</li>
+        <li>Scores against Gap Selling, SPIN, Challenger frameworks</li>
+        <li>Identifies missed closing opportunities</li>
+        <li>Suggests specific rebuttals for common objections</li>
+      </ul>
+    </div>
+    <div class="card card-sm" style="border-color:rgba(34,197,94,0.3);">
+      <h4 class="mb-4">Content Creation Bot</h4>
+      <span class="bonus-tag">Free Bonus</span>
+      <img src="assets/echo_content_card.png" alt="AI content creation with virality scoring" style="width:100%; display:block; border-radius:10px; margin-top:12px; margin-bottom:12px;">
+      <p class="text-secondary" style="font-size:16px;">AI generates social content, email sequences, and thought leadership pieces based on Ocon's expertise. Kevin's voice, Kevin's knowledge, published consistently without Kevin writing a word.</p>
+      <ul class="check-list mt-12" style="font-size:15px;">
+        <li>Generates LinkedIn posts in Kevin's voice</li>
+        <li>Creates email nurture sequences</li>
+        <li>Produces case study drafts from call transcripts</li>
+        <li>Builds authority content for the ScanStation 300</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-sm" style="border-color:rgba(34,197,94,0.3);">
+      <div style="font-size:40px; margin-bottom:12px;">&#128270;</div>
+      <h4 class="mb-4">SEO Agency Introduction</h4>
+      <span class="bonus-tag">Free Bonus</span>
+      <p class="text-secondary mt-12" style="font-size:16px;">We have a relationship with a top SEO agency. As part of this engagement, we will make a personal introduction so Ocon can explore organic search as an additional growth channel.</p>
+    </div>
+    <div class="card card-sm card-violet text-center" style="display:flex; flex-direction:column; justify-content:center;">
+      <p style="font-size:18px; font-weight:600; margin-bottom:12px;">Total Bonus Value</p>
+      <div style="font-size:44px; font-weight:700; color:var(--green);">&euro;4,500+</div>
+      <p class="text-secondary mt-12" style="font-size:15px;">Deployed free over 30 days. Included in the upfront package only.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 14: WHAT OCON KEEPS -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="14">
+<div class="slide-inner">
+  <p class="eyebrow text-green">The Difference</p>
+  <h2 class="mb-12">What Ocon Keeps When We Are Done</h2>
+  <p class="subtitle">A traditional agency takes their systems with them. We install ours into your business. Everything we build stays with Ocon.</p>
+
+  <div class="grid-2 mb-24">
+    <div class="card card-sm card-green">
+      <h4 class="text-green mb-12">Infrastructure</h4>
+      <ul class="check-list" style="font-size:16px;">
+        <li><strong>17 warmed sending accounts</strong> across 3 domains</li>
+        <li><strong>Complete ICP research</strong> &mdash; 630 lines of market data</li>
+        <li><strong>HeyReach LinkedIn system</strong> connected to Kevin's profile</li>
+        <li><strong>Proven offer messaging</strong> &mdash; tested and refined</li>
+        <li><strong>Loom outreach system</strong> &mdash; Miro board, scripts, SOPs</li>
+        <li><strong>Customer testimonial</strong> &mdash; recorded and deployable</li>
+      </ul>
+    </div>
+    <div class="card card-sm card-green">
+      <h4 class="text-green mb-12">AI Systems</h4>
+      <ul class="check-list" style="font-size:16px;">
+        <li><strong>AI lead qualification engine</strong> &mdash; scores and routes replies</li>
+        <li><strong>Customer upsell system</strong> &mdash; built on your purchase data</li>
+        <li><strong>Phone enrichment pipeline</strong> for your Irish sales team</li>
+        <li><strong>Automated follow-up sequences</strong> &mdash; multi-touch, multi-channel</li>
+        <li><strong>ScanStation lead magnet funnel</strong> &mdash; ROI calculator, demo pipeline</li>
+        <li><strong>Sales call auditor + content bot</strong> &mdash; AI tools for your team</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="glow-card">
+    <p style="font-size:20px; font-weight:600; margin-bottom:12px;">This is not rent. This is ownership.</p>
+    <p class="text-secondary" style="font-size:17px;">Your data. Your domains. Your team trained to operate it. The day our engagement ends, Ocon has a revenue machine that did not exist before &mdash; and it keeps running.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 15: 6-MONTH GUARANTEE -->
+<!-- ============================================================ -->
+<div class="slide center-v" data-slide="15">
+<div class="slide-inner text-center" style="justify-content:center; min-height:100%; display:flex; flex-direction:column;">
+  <div class="section-divider"></div>
+  <p class="eyebrow mb-16" style="font-size:15px;">The Guarantee</p>
+  <h2 style="font-size:44px; margin-bottom:24px;">If We Do Not Hit These Numbers,<br>We Work for Free Until We Do</h2>
+
+  <div class="grid-2 mb-32" style="max-width:700px; margin-left:auto; margin-right:auto;">
+    <div class="glow-card">
+      <div style="font-size:52px; font-weight:700; color:var(--green); margin-bottom:8px;">50</div>
+      <p style="font-size:18px; font-weight:600;">Qualified Leads</p>
+      <p class="text-secondary mt-12" style="font-size:15px;">Decision makers at labs that fit Ocon's ICP, engaged and ready for a conversation</p>
+    </div>
+    <div class="glow-card">
+      <div style="font-size:44px; font-weight:700; color:var(--green); margin-bottom:8px;">&euro;300K</div>
+      <p style="font-size:18px; font-weight:600;">Pipeline Generated</p>
+      <p class="text-secondary mt-12" style="font-size:15px;">Measurable pipeline value from new business + existing customer expansion</p>
+    </div>
+  </div>
+
+  <div class="card card-sm card-violet" style="max-width:700px; margin:0 auto 24px; text-align:left;">
+    <h4 class="text-accent mb-12">How the Guarantee Works</h4>
+    <ul class="bullet-list" style="font-size:16px;">
+      <li>If we do not deliver 50 qualified leads and &euro;300K pipeline within 6 months, <strong>we continue working for free</strong> until those numbers are hit</li>
+      <li>Qualified lead = a decision maker at a lab that fits Ocon's ICP who has engaged with our outreach and expressed interest</li>
+      <li>Pipeline = signed deals + active opportunities with estimated annual value</li>
+    </ul>
+  </div>
+
+  <p class="text-secondary" style="font-size:16px; max-width:600px; margin:0 auto;">Phase 1 guarantee was &euro;150K pipeline. We delivered &euro;360-710K and added 2 extra weeks free. We back our work.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 16: INVESTMENT — 2 OPTIONS -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="16">
+<div class="slide-inner">
+  <p class="eyebrow">Investment</p>
+  <h2 class="text-center mb-32">Two Ways to Move Forward</h2>
+
+  <div class="grid-2" style="max-width:860px; margin:0 auto;">
+
+    <!-- OPTION A: UPFRONT -->
+    <div class="pricing-card featured">
+      <div class="pricing-badge">Recommended</div>
+      <h4 class="mb-8">The Full System</h4>
+      <p class="text-secondary mb-12" style="font-size:14px;">6-month commitment. All systems + all bonuses + guarantee.</p>
+      <div class="price-big text-accent">&euro;13,500</div>
+      <p class="text-secondary mb-8" style="font-size:15px;">for the first 90 days</p>
+      <p class="text-secondary mb-12" style="font-size:14px;">Then &euro;13,500 at day 90 &mdash; <strong>only if guarantees are on track.</strong><br>If not, we continue working free until they are.</p>
+      <div style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-radius:10px; padding:12px 16px; margin-bottom:20px;">
+        <p style="font-size:15px; font-weight:600; color:var(--green); margin-bottom:4px;">You save &euro;6,000 vs monthly</p>
+        <p style="font-size:13px; color:var(--text-secondary);">&euro;27,000 total vs &euro;33,000 at &euro;5,500/mo &mdash; plus &euro;4,500+ in bonuses only available with this option</p>
+      </div>
+
+      <div style="text-align:left;">
+        <h4 style="font-size:16px;" class="text-green mb-8">Everything Included:</h4>
+        <ul class="check-list" style="font-size:14px;">
+          <li>AI Prospecting Engine (email + LinkedIn)</li>
+          <li>Speed to Lead system + phone enrichment</li>
+          <li>Customer Revenue Engine (upsell system)</li>
+          <li>ScanStation 300 lead magnet pipeline</li>
+          <li>Personalised Loom video outreach</li>
+          <li>50 qualified leads + &euro;300K pipeline guarantee</li>
+        </ul>
+        <h4 style="font-size:16px;" class="text-green mb-8 mt-12">Bonuses (Upfront Only):</h4>
+        <ul class="check-list" style="font-size:14px;">
+          <li>Weekly KPI check-in calls (operations)</li>
+          <li>Monthly strategy calls with Jordan</li>
+          <li>Sales Call Closing Auditor (AI agent)</li>
+          <li>Content Creation Bot (AI agent)</li>
+          <li>SEO agency introduction</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- OPTION B: MONTHLY -->
+    <div class="pricing-card">
+      <h4 class="mb-8 text-secondary">Monthly</h4>
+      <p class="text-secondary mb-12" style="font-size:14px;">Core systems only. No commitment. No bonuses.</p>
+      <div class="price-big">&euro;5,500</div>
+      <p class="text-secondary mb-20" style="font-size:15px;">per month, cancel anytime</p>
+
+      <div style="text-align:left;">
+        <h4 style="font-size:16px;" class="mb-8">Core Systems:</h4>
+        <ul class="check-list" style="font-size:14px;">
+          <li>AI Prospecting Engine (email + LinkedIn)</li>
+          <li>Speed to Lead system + phone enrichment</li>
+          <li>Customer Revenue Engine (upsell system)</li>
+          <li>ScanStation 300 lead magnet pipeline</li>
+          <li>Personalised Loom video outreach</li>
+          <li>Monthly pipeline review</li>
+        </ul>
+        <div class="card card-sm card-red mt-12" style="padding:16px;">
+          <p style="font-size:14px; color:var(--text-secondary);"><strong class="text-red">Not included:</strong> Weekly KPI calls, monthly strategy calls, AI agent bonuses, SEO introduction, performance guarantee</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-20">
+    <p class="text-secondary" style="font-size:17px;">Option A: <strong>&euro;150/day</strong> for the complete system, all bonuses, and a guarantee that we hit the numbers or work free.<br>One new customer covers a full month. One ScanStation sale covers the entire engagement.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 17: 90-DAY INSTALLATION SCHEDULE -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="17">
+<div class="slide-inner">
+  <p class="eyebrow">Installation Schedule</p>
+  <h2 class="mb-24">90-Day System Build</h2>
+
+  <div class="tl-grid">
+    <div class="tl-card">
+      <span class="tl-badge tl-badge-purple">Week 1-2</span>
+      <h4>Connect and Automate</h4>
+      <ul>
+        <li>Automate follow-up for all active leads (replace manual process)</li>
+        <li>Connect Kevin's LinkedIn to HeyReach</li>
+        <li>Shift cold email targeting to independent labs</li>
+        <li>Deploy AI qualification on all inbound replies</li>
+        <li>Set up phone enrichment pipeline for your Irish team</li>
+        <li>Deploy Sales Call Auditor AI agent</li>
+      </ul>
+    </div>
+    <div class="tl-card">
+      <span class="tl-badge tl-badge-purple">Week 3-4</span>
+      <h4>Customer Engine Build</h4>
+      <ul>
+        <li>Receive and analyse customer purchase data</li>
+        <li>Build AI cross-sell recommendation engine</li>
+        <li>Launch first upsell batch to top 50 customers</li>
+        <li>First weekly KPI call - train your team on dashboards</li>
+        <li>Deploy Content Creation Bot</li>
+      </ul>
+    </div>
+    <div class="tl-card">
+      <span class="tl-badge tl-badge-amber">Month 2</span>
+      <h4>All Systems Live</h4>
+      <ul>
+        <li>All systems running simultaneously</li>
+        <li>ScanStation 300 lead magnet campaign launches</li>
+        <li>LinkedIn generating 20+ conversations per week</li>
+        <li>Customer upsell expanded to full customer base</li>
+        <li>SEO agency introduction made</li>
+      </ul>
+    </div>
+    <div class="tl-card">
+      <span class="tl-badge tl-badge-green">Month 3</span>
+      <h4>Optimise and Scale</h4>
+      <ul>
+        <li>Data-driven refinement of all systems</li>
+        <li>Double down on highest-converting segments</li>
+        <li>Expand to UK market if Ireland pipeline is strong</li>
+        <li>Your team fully trained to operate independently</li>
+        <li>Pipeline review &mdash; guarantee check vs target</li>
+      </ul>
+    </div>
+    <div class="tl-card tl-full">
+      <span class="tl-badge tl-badge-green">At the End of 6 Months</span>
+      <h4>A Revenue Machine That Belongs to Ocon</h4>
+      <p style="font-size:16px; color:var(--text-secondary);">New customers from cold outreach. Increased wallet share from existing customers. A ScanStation pipeline. A trained team. AI agents analysing your calls and creating your content. And 4 revenue systems that Ocon owns and operates &mdash; whether or not we continue working together.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 18: FAQ -->
+<!-- ============================================================ -->
+<div class="slide" data-slide="18">
+<div class="slide-inner">
+  <p class="eyebrow">Questions</p>
+  <h2 class="mb-24">Common Questions</h2>
+
+  <details class="faq-item">
+    <summary>How is this different from Phase 1?</summary>
+    <div class="faq-body">Phase 1 was research and infrastructure building. We tested messaging, mapped your ICP, and built the sending accounts. Phase 2 uses that research to install AI systems that run the outreach automatically. Two of the systems (customer upsell engine and ScanStation pipeline) never existed before. And everything we build stays with you.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Did Phase 1 actually deliver on the guarantee?</summary>
+    <div class="faq-body">Yes. The guarantee was &euro;150,000 in pipeline. Between the signed Glenilen Farm deal, the three interested leads (BioMarin, HSE, XTREME), TechRight's fresh reply, and the 19 contacts in active follow-up, total pipeline is conservatively &euro;360K and realistically &euro;710K. BioMarin alone is a potential &euro;200K account. We also added 2 extra weeks of work free of charge.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>What if I stop after 6 months - do I lose everything?</summary>
+    <div class="faq-body">No. That is the point. The sending accounts, the HeyReach automation, the customer upsell engine, the AI qualification system, the lead magnet funnels - all of it is built on your domains, your data, your accounts. Your team or any team can continue operating them.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>How much of Kevin's time does this require?</summary>
+    <div class="faq-body">Minimal. Our operations team handles daily execution. The AI systems handle volume. Kevin's involvement is showing up to close deals when qualified leads are presented, and joining the weekly KPI call and monthly strategy call to stay in the loop on performance.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>What about pharma companies telling employees to leave LinkedIn?</summary>
+    <div class="faq-body">This is exactly why we built a multi-channel system. LinkedIn works for non-pharma targets like independent labs, food and bev, and universities. For pharma, we lead with cold email and personalised Loom videos - channels they cannot block. The AI system routes each prospect to the right channel automatically.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>Is the customer upsell approach safe for our reputation?</summary>
+    <div class="faq-body">Completely. These are emails from Kevin to people who already buy from Ocon. No links, no tracking pixels, plain text. It reads like a personal recommendation from their account manager because that is exactly what it is.</div>
+  </details>
+
+  <details class="faq-item">
+    <summary>What happens if the guarantee numbers are not met?</summary>
+    <div class="faq-body">With the upfront option, we continue working for free until the 50 qualified leads and &euro;300K pipeline targets are met. There is no scenario where you pay the second tranche and we have not delivered. The second payment is conditional on results.</div>
+  </details>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 19: NEXT STEPS -->
+<!-- ============================================================ -->
+<div class="slide center-v" data-slide="19">
+<div class="slide-inner text-center" style="justify-content:center; min-height:100%; display:flex; flex-direction:column;">
+  <div class="section-divider"></div>
+  <h2 style="font-size:44px; margin-bottom:20px;">Ready to Install the System?</h2>
+  <p class="subtitle" style="max-width:650px; margin:0 auto 40px;">The research is done. The AI systems are built. We just need to connect them to Ocon.</p>
+
+  <div class="card card-sm" style="max-width:600px; margin:0 auto 32px; text-align:left;">
+    <h4 class="mb-12">To Get Started</h4>
+    <ul class="check-list">
+      <li>Choose your option (full system or monthly)</li>
+      <li>Share your customer purchase data for the revenue engine</li>
+      <li>Confirm LinkedIn verification code for HeyReach</li>
+      <li>Introduce us to your Irish sales rep for the phone handoff system</li>
+      <li>Installation begins within 7 days</li>
+    </ul>
+  </div>
+
+  <p class="playfair-quote" style="max-width:600px; margin:0 auto 32px; font-size:20px;">"Phase 1 built the machine. Phase 2 turns it on. And when we are done, it belongs to you."</p>
+
+  <p class="text-center muted" style="font-size:13px;">Prepared by Dopamine Digital &middot; dopaminedigital.io</p>
+</div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="nav-bar" id="navBar"></div>
+<div class="nav-counter" id="navCounter">1 / 19</div>
+
+<script>
+(function() {
+  var deck = document.getElementById('deck');
+  var slides = deck.querySelectorAll('.slide');
+  var navBar = document.getElementById('navBar');
+  var navCounter = document.getElementById('navCounter');
+  var totalSlides = slides.length;
+  var currentSlide = 1;
+
+  for (var i = 1; i <= totalSlides; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 1 ? ' active' : '');
+    dot.setAttribute('data-slide', i);
+    (function(n) { dot.addEventListener('click', function() { goToSlide(n); }); })(i);
+    navBar.appendChild(dot);
+  }
+
+  function goToSlide(n) {
+    if (n < 1 || n > totalSlides) return;
+    for (var i = 0; i < slides.length; i++) slides[i].classList.remove('active');
+    var dots = navBar.querySelectorAll('.nav-dot');
+    for (var i = 0; i < dots.length; i++) dots[i].classList.remove('active');
+    currentSlide = n;
+    slides[currentSlide - 1].classList.add('active');
+    slides[currentSlide - 1].scrollTop = 0;
+    dots[currentSlide - 1].classList.add('active');
+    navCounter.textContent = currentSlide + ' / ' + totalSlides;
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); goToSlide(currentSlide + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goToSlide(currentSlide - 1); }
+  });
+})();
+</script>
+</body>
+</html>
